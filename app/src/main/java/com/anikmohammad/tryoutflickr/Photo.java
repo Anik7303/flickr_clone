@@ -1,6 +1,10 @@
 package com.anikmohammad.tryoutflickr;
 
-class Photo {
+import java.io.Serializable;
+
+class Photo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String title;
     private String author;
     private String author_id;
