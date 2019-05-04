@@ -76,18 +76,22 @@ public class MainActivity extends BaseActivity implements GetFlickrJSONData.OnDa
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_search:
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onDataAvailable(List<Photo> data, DownloadStatus status) {
         Log.d(TAG, "onDataAvailable: starts");
-        if(status == DownloadStatus.OK) {
+        if (status == DownloadStatus.OK) {
             mAdapter.loadNewData(data);
         } else {
             Log.d(TAG, "onDataAvailable: Error with status -> " + status);
