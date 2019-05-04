@@ -35,19 +35,24 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewH
     @Override
     public void onBindViewHolder(@NonNull FlickrRecyclerViewHolder holder, int position) {
         // Called by the layout manager when it wants new data in an exiting row
-        Photo photoItem = mPhotosList.get(position);
-        Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " -> " + position);
-        Picasso.get().load(photoItem.getImageURL())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(holder.thumbnail);
-        holder.title.setText(photoItem.getTitle());
+        if(mPhotosList == null || mPhotosList.size() == 0) {
+            holder.thumbnail.setImageResource(R.drawable.placeholder);
+            holder.title.setText(R.string.empty_photoList_text);
+        } else {
+            Photo photoItem = mPhotosList.get(position);
+            Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " -> " + position);
+            Picasso.get().load(photoItem.getImageURL())
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .into(holder.thumbnail);
+            holder.title.setText(photoItem.getTitle());
+        }
     }
 
     @Override
     public int getItemCount() {
 //        Log.d(TAG, "getItemCount: called");
-        return (mPhotosList != null && mPhotosList.size() > 0) ? mPhotosList.size() : 0;
+        return (mPhotosList != null && mPhotosList.size() > 0) ? mPhotosList.size() : 1;
     }
 
     void loadNewData(List<Photo> newPhotos) {

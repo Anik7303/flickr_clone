@@ -1,14 +1,15 @@
 package com.anikmohammad.tryoutflickr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,14 @@ public class MainActivity extends BaseActivity implements GetFlickrJSONData.OnDa
     protected void onResume() {
         Log.d(TAG, "onResume: starts");
         super.onResume();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String queryString = sharedPreferences.getString(FLICKR_QUERY, "");
+
+        queryString = queryString.replaceAll(" ", ",");
+
         String baseLink = "https://api.flickr.com/services/feeds/photos_public.gne";
         GetFlickrJSONData getFlickrJSONData = new GetFlickrJSONData(MainActivity.this, baseLink, "es-us", true);
-        getFlickrJSONData.execute("android");
+        getFlickrJSONData.execute(queryString);
         Log.d(TAG, "onResume: ends");
     }
 
